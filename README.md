@@ -1,0 +1,1 @@
+# DjangoSyahdiraalaparistik2201170022
