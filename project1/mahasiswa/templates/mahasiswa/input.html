@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Data Mahasiswa</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1920&q=80')
+                  no-repeat center center fixed;
+      background-size: cover;
+      font-family: "Poppins", sans-serif;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0, 0, 40, 0.8), rgba(0, 80, 130, 0.6));
+      z-index: -1;
+      animation: hueShift 20s linear infinite;
+    }
+
+    @keyframes hueShift {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: rgba(0, 255, 255, 0.7);
+      border-radius: 50%;
+      animation: float 10s linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) scale(1); opacity: 0.8; }
+      100% { transform: translateY(-100vh) scale(0.5); opacity: 0; }
+    }
+
+    h1, h2 {
+      color: #00e5ff;
+      text-shadow: 0 0 8px rgba(0, 229, 255, 0.8);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 200, 255, 0.3);
+      animation: fadeIn 1s ease;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .glass-card:hover {
+      box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+      transform: translateY(-3px);
+    }
+
+    .table thead th {
+      background-color: rgba(0, 229, 255, 0.9);
+      color: black;
+      text-align: center;
+    }
+
+    .table tbody tr:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      transition: 0.3s;
+    }
+
+    .btn {
+      border-radius: 30px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+    }
+
+    .btn-edit {
+      background: linear-gradient(90deg, #ffc107, #ffcd39);
+      border: none;
+      color: #000;
+    }
+
+    .btn-hapus {
+      background: linear-gradient(90deg, #ff0033, #ff3366);
+      border: none;
+      color: #fff;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      border: none;
+    }
+
+    .btn-success {
+      background: linear-gradient(90deg, #00ff88, #00c851);
+      border: none;
+    }
+
+    .text-whatsapp {
+      color: #000 !important;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .table { font-size: 14px; }
+      h1 { font-size: 24px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="particles" id="particles"></div>
+
+  <div class="container py-5">
+    <div class="text-center mb-5">
+      <h1 class="fw-bold">Manajemen Data Mahasiswa</h1>
+    </div>
+
+    {% if pesan %}
+      <div class="alert alert-success text-center" role="alert">
+        {{ pesan }}
+      </div>
+    {% endif %}
+
+    <div class="glass-card p-4 mb-5">
+      <form method="post">
+        {% csrf_token %}
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="mb-3">
+              {{ form.nama.label_tag }}
+              {{ form.nama }}
+              {% if form.nama.errors %}<div class="text-danger small">{{ form.nama.errors }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              {{ form.npm.label_tag }}
+              {{ form.npm }}
+              {% if form.npm.errors %}<div class="text-danger small">{{ form.npm.errors }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              {{ form.pendidikan_terakhir.label_tag }}
+              {{ form.pendidikan_terakhir }}
+            </div>
+            <div class="mb-3">
+              {{ form.jurusan.label_tag }}
+              {{ form.jurusan }}
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="mb-3">
+              {{ form.email.label_tag }}
+              {{ form.email }}
+              {% if form.email.errors %}<div class="text-danger small">{{ form.email.errors }}</div>{% endif %}
+            </div>
+            <div class="mb-3">
+              {{ form.whatsapp.label_tag }}
+              {{ form.whatsapp }}
+            </div>
+            <div class="mb-3">
+              {{ form.tempat_lahir.label_tag }}
+              {{ form.tempat_lahir }}
+            </div>
+            <div class="mb-3">
+              {{ form.tanggal_lahir.label_tag }}
+              {{ form.tanggal_lahir }}
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3 mt-3">
+          {{ form.alamat.label_tag }}
+          {{ form.alamat }}
+        </div>
+
+        <div class="d-flex gap-2">
+          {% if edit_mode %}
+            <button type="submit" class="btn btn-success">
+              <i class="bi bi-save"></i> Update
+            </button>
+            <a href="{% url 'input_mahasiswa' %}" class="btn btn-secondary">
+              <i class="bi bi-x-circle"></i> Batal
+            </a>
+          {% else %}
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-send"></i> Kirim
+            </button>
+            <a href="{% url 'daftar_mahasiswa' %}" class="btn btn-outline-light ms-2">
+              <i class="bi bi-list"></i> Lihat Daftar
+            </a>
+          {% endif %}
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const particlesContainer = document.getElementById('particles');
+    const jumlah = 60;
+    for (let i = 0; i < jumlah; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.top = Math.random() * 100 + '%';
+      particle.style.animationDuration = 5 + Math.random() * 10 + 's';
+      particlesContainer.appendChild(particle);
+    }
+    
+    // Buka chat WhatsApp dengan nomor mahasiswa (menormalisasi input yang mungkin tanpa kode negara)
+    function openWa(raw) {
+      if (!raw || !raw.trim()) {
+        alert('Nomor WhatsApp tidak tersedia.');
+        return;
+      }
+
+      // Ambil angka saja
+      let digits = String(raw).replace(/[^0-9]/g, '');
+
+      if (!digits) {
+        alert('Nomor WhatsApp tidak valid.');
+        return;
+      }
+
+      // Jika dimulai '0' -> ganti dengan 62 (contoh 0812... -> 62812...)
+      if (digits.startsWith('0')) {
+        digits = '62' + digits.slice(1);
+      } else if (digits.startsWith('8')) {
+        // Jika user menyimpan tanpa leading zero atau country code (misal: 8123...) tambahkan 62
+        digits = '62' + digits;
+      }
+
+      if (digits.length < 9) {
+        alert('Nomor WhatsApp terlalu pendek.');
+        return;
+      }
+
+      const waUrl = 'https://wa.me/' + digits;
+      window.open(waUrl, '_blank');
+    }
+  </script>
+</body>
+</html>
